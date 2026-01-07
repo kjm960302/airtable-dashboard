@@ -142,16 +142,18 @@ export default function Dashboard() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ category, percent }) => `${category}: ${(percent * 100).toFixed(0)}%`}
+                  label
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
+                  nameKey="category"
                 >
                   {categoryData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
+                <Legend />
               </PieChart>
             </ResponsiveContainer>
           </div>
