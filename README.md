@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Airtable Dashboard
+
+A modern data dashboard that visualizes Airtable data with beautiful charts and statistics.
+
+## Features
+
+- Real-time data visualization with interactive charts (Bar, Line, Pie)
+- Responsive design with Tailwind CSS
+- Automatic fallback to sample data if Airtable is not configured
+- Easy integration with any Airtable base
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure Airtable (Optional)
+
+The app works out of the box with sample data. To connect to your Airtable:
+
+#### Step 1: Get Your Airtable API Key
+
+1. Go to [airtable.com/create/tokens](https://airtable.com/create/tokens)
+2. Create a new personal access token with the following scopes:
+   - `data.records:read`
+   - `schema.bases:read`
+3. Copy your API key
+
+Create a `.env.local` file and add your API key:
+```
+AIRTABLE_API_KEY=your_airtable_api_key_here
+```
+
+#### Step 2: Create an Airtable Base
+
+1. Go to [airtable.com](https://airtable.com) and sign in
+2. Click "Add a base" and choose "Start from scratch"
+3. Name your base (e.g., "Dashboard Data")
+
+#### Step 3: Create a Table
+
+Create a table with the following columns:
+- `name` (Single line text)
+- `value` (Number)
+- `category` (Single line text)
+- `date` (Date)
+
+Add some sample data to your table.
+
+#### Step 4: Get Your Base ID and Table Name
+
+1. Open your Airtable base
+2. Go to Help > API documentation
+3. Find your Base ID (starts with "app...")
+4. Note your table name (default is "Table 1")
+
+#### Step 5: Update Environment Variables
+
+Edit `.env.local` and update with your Base ID and Table Name:
+
+```env
+AIRTABLE_API_KEY=your_airtable_api_key_here
+AIRTABLE_BASE_ID=appXXXXXXXXXXXXXX
+AIRTABLE_TABLE_NAME=Table 1
+```
+
+### 3. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the dashboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Deploy to Vercel
 
-## Learn More
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com)
+3. Import your GitHub repository
+4. Add environment variables in Vercel:
+   - `AIRTABLE_API_KEY`
+   - `AIRTABLE_BASE_ID` (optional)
+   - `AIRTABLE_TABLE_NAME` (optional)
+5. Deploy!
 
-To learn more about Next.js, take a look at the following resources:
+## Built With
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js 15](https://nextjs.org/) - React Framework
+- [TypeScript](https://www.typescriptlang.org/) - Type Safety
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [Recharts](https://recharts.org/) - Charts
+- [Airtable](https://airtable.com/) - Database
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
