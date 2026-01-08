@@ -15,18 +15,21 @@ const sampleData = [
   { id: '10', name: 'Product J', value: 410, category: 'Food', date: '2024-03-01' },
 ];
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
     const apiKey = process.env.AIRTABLE_API_KEY;
-    const baseId = process.env.AIRTABLE_BASE_ID;
-    const tableName = process.env.AIRTABLE_TABLE_NAME;
+
+    // Get Base ID and Table Name from query params or environment variables
+    const baseId = searchParams.get('baseId') || process.env.AIRTABLE_BASE_ID;
+    const tableName = searchParams.get('tableName') || process.env.AIRTABLE_TABLE_NAME;
 
     // If Airtable is not configured, return sample data
     if (!apiKey || !baseId || !tableName || baseId === 'your_base_id_here') {
       return NextResponse.json({
         data: sampleData,
         source: 'sample',
-        message: 'Using sample data. Configure Airtable credentials to use real data.',
+        message: 'Using sample data. Go to Settings to configure your Airtable Base.',
       });
     }
 

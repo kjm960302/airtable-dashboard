@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface DataItem {
@@ -20,6 +21,7 @@ interface ApiResponse {
 const COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'];
 
 export default function Dashboard() {
+  const router = useRouter();
   const [data, setData] = useState<DataItem[]>([]);
   const [source, setSource] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -32,7 +34,19 @@ export default function Dashboard() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/data');
+
+      // Get settings from localStorage
+      const baseId = localStorage.getItem('airtable_base_id');
+      const tableName = localStorage.getItem('airtable_table_name');
+
+      // Build API URL with query params
+      let apiUrl = '/api/data';
+      const params = new URLSearchParams();
+      if (baseId) params.append('baseId', baseId);
+      if (tableName) params.append('tableName', tableName);
+      if (params.toString()) apiUrl += `?${params.toString()}`;
+
+      const response = await fetch(apiUrl);
       const result: ApiResponse = await response.json();
       setData(result.data);
       setSource(result.source);
@@ -80,9 +94,20 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Airtable Dashboard
-          </h1>
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-4xl font-bold text-gray-900">
+              Airtable Dashboard
+            </h1>
+            <button
+              onClick={() => router.push('/settings')}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+              </svg>
+              Settings
+            </button>
+          </div>
           <div className="flex items-center gap-2">
             <span className={`px-3 py-1 rounded-full text-sm ${
               source === 'airtable'
